@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard KAFA Futuristik - Tahun 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif'],
+                    },
+                    colors: {
+                        neonCyan: '#00f3ff',
+                        neonGold: '#ffd700',
+                        darkBg: '#0b0f19',
+                        glassBg: 'rgba(11, 15, 25, 0.7)',
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #ffffff;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            /* Islamic Geometric / Tech pattern background */
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 243, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300f3ff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            min-height: 100vh;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            border-radius: 1.5rem;
+        }
+
+        .text-neon-cyan {
+            color: #00f3ff;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6), 0 0 20px rgba(0, 243, 255, 0.4);
+        }
+
+        .text-neon-gold {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-neon {
+            background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(0, 243, 255, 0.2));
+            border: 1px solid #00f3ff;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon:hover {
+            background: #00f3ff;
+            color: #000;
+            box-shadow: 0 0 20px #00f3ff, 0 0 40px #00f3ff;
+            transform: scale(1.05);
+        }
+
+        .btn-neon-gold {
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.2));
+            border: 1px solid #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-neon-gold:hover {
+            background: #ffd700;
+            color: #000;
+            box-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700;
+            transform: scale(1.05);
+        }
+
+        .option-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s;
+        }
+        
+        .option-btn:hover {
+            border-color: #00f3ff;
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .option-selected {
+            background: rgba(0, 243, 255, 0.2) !important;
+            border-color: #00f3ff !important;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00f3ff;
+            border-radius: 4px;
+        }
+
+        /* Hide elements utility */
+        .hidden-screen {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <!-- SCREEN 1: Laman Utama (Pilih Subjek) -->
+    <div id="screen-home" class="w-full max-w-4xl glass-panel p-8 md:p-12 text-center relative overflow-hidden animate-fade-in">
+        <!-- Hiasan Dekorasi -->
+        <div class="absolute top-0 left-0 w-32 h-32 bg-neonCyan opacity-10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 right-0 w-32 h-32 bg-neonGold opacity-10 rounded-full blur-3xl translate-x-1/2 translate-y-1/2"></div>
+        
+        <i class="fas fa-rocket text-5xl text-neon-cyan mb-4 animate-float"></i>
+        <h1 class="font-orbitron text-4xl md:text-5xl font-bold mb-4 text-white tracking-wider leading-tight">
+            PECUTAN AKHIR <br><span class="text-neon-cyan">KAFA UASA 2026</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 font-cairo mb-8">Platform Interaktif Tahun 4</p>
+        
+        <h2 class="text-2xl text-neon-gold font-bold mb-6">PILIH MISI ANDA</h2>
+        
+        <div class="flex flex-col md:flex-row gap-6 justify-center mt-8">
+            <button onclick="startQuiz('feqah')" class="btn-neon px-8 py-6 rounded-2xl flex flex-col items-center gap-3 w-full md:w-64 group">
+                <i class="fas fa-pray text-4xl group-hover:text-black transition-colors"></i>
+                <span class="font-orbitron text-2xl font-bold">FEQAH</span>
+                <span class="text-sm font-cairo">Solat Sunat & Jamak Qasar</span>
+            </button>
+            
+            <button onclick="startQuiz('tauhid')" class="btn-neon-gold px-8 py-6 rounded-2xl flex flex-col items-center gap-3 w-full md:w-64 group">
+                <i class="fas fa-star-and-crescent text-4xl group-hover:text-black transition-colors"></i>
+                <span class="font-orbitron text-2xl font-bold">TAUHID</span>
+                <span class="text-sm font-cairo">Sifat Allah, Rasul & Kiamat</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 2: Skrin Kuiz -->
+    <div id="screen-quiz" class="w-full max-w-3xl glass-panel p-6 md:p-10 hidden-screen flex flex-col min-h-[500px]">
+        
+        <!-- Header Kuiz -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="font-orbitron text-xl font-bold text-neon-cyan flex items-center gap-2">
+                <i id="quiz-icon" class="fas fa-gamepad"></i>
+                <span id="quiz-title">MODUL</span>
+            </div>
+            <div class="bg-slate-800 px-4 py-2 rounded-full border border-slate-600 font-orbitron font-bold">
+                Soalan <span id="current-q-num" class="text-neon-gold">1</span> / 30
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-800 rounded-full h-3 mb-8 border border-slate-700 overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-neonCyan h-3 rounded-full transition-all duration-500 shadow-[0_0_10px_#00f3ff]" style="width: 5%"></div>
+        </div>
+
+        <!-- Kawasan Soalan -->
+        <div class="flex-grow flex flex-col justify-center">
+            
+            <!-- Arahan Format (Isi tempat kosong/Padanan/MCQ) -->
+            <div id="question-instruction" class="text-sm text-neon-gold mb-2 font-bold uppercase tracking-widest hidden">
+                <i class="fas fa-info-circle mr-1"></i> Arahan
+            </div>
+
+            <!-- Teks Soalan -->
+            <h2 id="question-text" class="text-2xl md:text-3xl font-bold mb-8 leading-relaxed">
+                Loading...
+            </h2>
+
+            <!-- Pilihan Jawapan -->
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Butang akan dijana oleh JavaScript -->
+            </div>
+        </div>
+
+        <!-- Butang Kawalan -->
+        <div class="mt-8 flex justify-end">
+            <button id="btn-next" onclick="nextQuestion()" class="hidden btn-neon px-8 py-3 rounded-xl font-orbitron font-bold text-lg flex items-center gap-2">
+                SETERUSNYA <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: Skrin Keputusan -->
+    <div id="screen-result" class="w-full max-w-2xl glass-panel p-8 md:p-12 text-center hidden-screen">
+        <h2 class="font-orbitron text-3xl md:text-4xl font-bold mb-6 text-white">MISI SELESAI!</h2>
+        
+        <!-- Bulatan Markah -->
+        <div class="relative w-48 h-48 mx-auto mb-8 flex items-center justify-center rounded-full border-4 border-slate-700 bg-slate-900 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <svg class="absolute top-0 left-0 w-full h-full transform -rotate-90">
+                <circle cx="96" cy="96" r="88" stroke="rgba(255,255,255,0.1)" stroke-width="12" fill="none"></circle>
+                <circle id="score-circle" cx="96" cy="96" r="88" stroke="#00f3ff" stroke-width="12" fill="none" stroke-dasharray="553" stroke-dashoffset="553" style="transition: stroke-dashoffset 1.5s ease-out;"></circle>
+            </svg>
+            <div class="text-center z-10">
+                <div id="score-text" class="text-5xl font-orbitron font-bold text-white">0%</div>
+                <div class="text-sm text-gray-400 mt-1">MARKAH</div>
+            </div>
+        </div>
+
+        <!-- Gred & Komen -->
+        <div id="grade-badge" class="inline-block px-6 py-2 rounded-full border-2 text-2xl font-bold font-orbitron mb-4 shadow-lg">
+            GRED
+        </div>
+        <p id="grade-remark" class="text-xl mb-8 text-gray-300"></p>
+
+        <!-- Butang Tindakan -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="showReview()" class="btn-neon px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                <i class="fas fa-search"></i> SEMAK JAWAPAN
+            </button>
+            <button onclick="goHome()" class="btn-neon-gold px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+                <i class="fas fa-home"></i> MENU UTAMA
+            </button>
+        </div>
+    </div>
+
+    <!-- SCREEN 4: Skrin Semakan -->
+    <div id="screen-review" class="w-full max-w-4xl glass-panel p-6 md:p-8 hidden-screen max-h-[90vh] flex flex-col">
+        <div class="flex justify-between items-center mb-6 pb-4 border-b border-slate-700">
+            <h2 class="font-orbitron text-2xl font-bold text-neon-cyan">SEMAKAN JAWAPAN</h2>
+            <button onclick="closeReview()" class="text-white hover:text-red-400 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+        </div>
+        
+        <div id="review-container" class="overflow-y-auto pr-2 flex-grow flex flex-col gap-4">
+            <!-- Kad Semakan akan dijana di sini -->
+        </div>
+        
+        <div class="mt-6 pt-4 border-t border-slate-700 text-center">
+            <button onclick="closeReview()" class="btn-neon px-8 py-3 rounded-xl font-bold">
+                KEMBALI
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data Soalan
+        // Format: 'mcq' (Aneka Pilihan), 'fill' (Isi Tempat Kosong), 'match' (Padanan - digayakan berbeza)
+        
+        const dataFeqah = [
+            { id: 1, type: 'mcq', q: "Apakah maksud solat Qasar?", options: ["Memendekkan solat 4 rakaat kepada 2 rakaat", "Menghimpunkan 2 solat fardu", "Solat sunat tambahan", "Memanjangkan bacaan solat"], answer: "Memendekkan solat 4 rakaat kepada 2 rakaat" },
+            { id: 2, type: 'mcq', q: "Solat fardu manakah yang BOLEH diqasarkan?", options: ["Zohor, Asar, Isyak", "Subuh, Maghrib, Isyak", "Zohor, Maghrib, Subuh", "Asar, Maghrib, Isyak"], answer: "Zohor, Asar, Isyak" },
+            { id: 3, type: 'fill', q: "Solat Jamak terbahagi kepada dua, iaitu Jamak Taqdim dan Jamak _____. ", options: ["Takhir", "Qasar", "Hajat", "Rawatib"], answer: "Takhir" },
+            { id: 4, type: 'match', q: "Padankan tujuan: Memohon petunjuk untuk membuat keputusan = Solat Sunat _____.", options: ["Istikharah", "Hajat", "Tahajjud", "Dhuha"], answer: "Istikharah" },
+            { id: 5, type: 'mcq', q: "Berapakah bilangan rakaat minimum bagi solat sunat Witir?", options: ["1 rakaat", "2 rakaat", "3 rakaat", "4 rakaat"], answer: "1 rakaat" },
+            { id: 6, type: 'mcq', q: "Bilakah waktu melaksanakan solat sunat Dhuha?", options: ["Selepas terbit matahari hingga sebelum Zohor", "Selepas Isyak hingga Subuh", "Selepas Asar hingga Maghrib", "Tengah malam"], answer: "Selepas terbit matahari hingga sebelum Zohor" },
+            { id: 7, type: 'match', q: "Padankan istilah: Solat sunat yang mengiringi solat fardu = Solat Sunat _____.", options: ["Rawatib", "Tahiyatul Masjid", "Witir", "Istikharah"], answer: "Rawatib" },
+            { id: 8, type: 'fill', q: "Menghimpunkan dua solat fardu di dalam satu waktu dipanggil solat ____.", options: ["Jamak", "Qasar", "Fardu", "Jumaat"], answer: "Jamak" },
+            { id: 9, type: 'mcq', q: "Syarat sah solat jamak dan qasar ialah perjalanan mestilah melebihi _____ marhalah.", options: ["2", "1", "3", "4"], answer: "2" },
+            { id: 10, type: 'mcq', q: "Apakah hukum melaksanakan solat sunat Rawatib Muakkad?", options: ["Sangat dituntut mengerjakannya", "Wajib mengerjakannya", "Haram mengerjakannya", "Kurang dituntut mengerjakannya"], answer: "Sangat dituntut mengerjakannya" },
+            { id: 11, type: 'mcq', q: "Bolehkah solat fardu Subuh dijamakkan?", options: ["Tidak boleh", "Boleh Jamak sahaja", "Boleh Qasar sahaja", "Boleh Jamak & Qasar"], answer: "Tidak boleh" },
+            { id: 12, type: 'fill', q: "Melakukan solat Asar di dalam waktu Zohor dipanggil Jamak ____.", options: ["Taqdim", "Takhir", "Qasar", "Tamam"], answer: "Taqdim" },
+            { id: 13, type: 'mcq', q: "Apakah hukum melaksanakan solat sunat Tahajjud?", options: ["Sunat", "Wajib", "Makruh", "Harus"], answer: "Sunat" },
+            { id: 14, type: 'mcq', q: "Bilakah waktu paling afdal melakukan solat sunat Tahajjud?", options: ["Sepertiga malam yang akhir", "Awal malam lepas Isyak", "Selepas solat Maghrib", "Siang hari"], answer: "Sepertiga malam yang akhir" },
+            { id: 15, type: 'match', q: "Padankan tindakan: Masuk ke dalam masjid = Solat sunat _____.", options: ["Tahiyatul Masjid", "Syukur", "Hajat", "Rawatib"], answer: "Tahiyatul Masjid" },
+            { id: 16, type: 'mcq', q: "Solat Jamak Takhir bermaksud menghimpunkan dua solat dan dilakukan di dalam waktu yang ____.", options: ["Kedua (Akhir)", "Pertama (Awal)", "Tengah", "Ketiga"], answer: "Kedua (Akhir)" },
+            { id: 17, type: 'fill', q: "Orang Islam yang sedang dalam perjalanan jauh (bermusafir) dipanggil _____.", options: ["Musafir", "Mukim", "Mastautin", "Imam"], answer: "Musafir" },
+            { id: 18, type: 'mcq', q: "Solat sunat Hajat dilakukan untuk memohon _____ daripada Allah SWT.", options: ["Pertolongan / Hajat", "Kekayaan sahaja", "Kecelakaan orang", "Pujian"], answer: "Pertolongan / Hajat" },
+            { id: 19, type: 'mcq', q: "Solat fardu Maghrib hanya boleh dijamakkan dengan solat fardu _____.", options: ["Isyak", "Asar", "Zohor", "Subuh"], answer: "Isyak" },
+            { id: 20, type: 'mcq', q: "Berapakah rakaat solat Qasar bagi solat Zohor?", options: ["2 Rakaat", "1 Rakaat", "3 Rakaat", "4 Rakaat"], answer: "2 Rakaat" },
+            { id: 21, type: 'mcq', q: "Apakah hukum mendirikan solat sunat secara umumnya?", options: ["Sunat (Dapat pahala jika buat)", "Wajib (Berdosa jika tinggal)", "Haram", "Makruh"], answer: "Sunat (Dapat pahala jika buat)" },
+            { id: 22, type: 'mcq', q: "Berapakah bilangan rakaat MAKSIMUM bagi solat sunat Witir?", options: ["11 rakaat", "3 rakaat", "1 rakaat", "20 rakaat"], answer: "11 rakaat" },
+            { id: 23, type: 'fill', q: "Solat sunat yang dilakukan SEBELUM solat fardu dikenali sebagai sunat _____.", options: ["Qabliyah", "Ba'diyah", "Tahiyatul Masjid", "Mutlaq"], answer: "Qabliyah" },
+            { id: 24, type: 'mcq', q: "Apakah yang dimaksudkan dengan 'Rukhsah' dalam ibadah solat Jamak dan Qasar?", options: ["Keringanan yang diberikan oleh Allah", "Kewajipan tambahan", "Hukuman berat", "Syarat sah solat"], answer: "Keringanan yang diberikan oleh Allah" },
+            { id: 25, type: 'mcq', q: "Solat fardu Maghrib mempunyai 3 rakaat. Bolehkah ia diqasarkan menjadi 2 rakaat?", options: ["Tidak Boleh", "Boleh", "Makruh", "Sunat"], answer: "Tidak Boleh" },
+            { id: 26, type: 'match', q: "Padankan waktu: Solat sunat sebagai penutup solat malam = Solat sunat _____.", options: ["Witir", "Tahajjud", "Hajat", "Tarawih"], answer: "Witir" },
+            { id: 27, type: 'mcq', q: "Jarak 2 marhalah (syarat musafir) adalah dianggarkan lebih kurang _____ kilometer.", options: ["81 - 90 km", "10 - 20 km", "50 - 60 km", "1000 km"], answer: "81 - 90 km" },
+            { id: 28, type: 'fill', q: "Solat sunat yang dilakukan SELEPAS solat fardu dikenali sebagai sunat _____.", options: ["Ba'diyah", "Qabliyah", "Tahajjud", "Witir"], answer: "Ba'diyah" },
+            { id: 29, type: 'mcq', q: "Apakah syarat utama sebelum mendirikan solat sunat Tahajjud?", options: ["Mesti tidur terlebih dahulu walaupun sekejap", "Mesti berjaga sepanjang malam", "Mesti dilakukan di masjid", "Mesti solat berjemaah"], answer: "Mesti tidur terlebih dahulu walaupun sekejap" },
+            { id: 30, type: 'mcq', q: "Sekiranya seseorang bermusafir dengan tujuan maksiat, bolehkah dia melakukan solat jamak dan qasar?", options: ["Tidak sah (kerana tujuan maksiat)", "Boleh, asalkan dia musafir", "Sah tetapi berdosa", "Makruh"], answer: "Tidak sah (kerana tujuan maksiat)" }
+        ];
+
+        const dataTauhid = [
+            { id: 1, type: 'mcq', q: "Berapakah jumlah sifat wajib bagi Allah yang dipelajari?", options: ["20", "10", "4", "99"], answer: "20" },
+            { id: 2, type: 'mcq', q: "Apakah maksud sifat wajib 'Wujud' bagi Allah?", options: ["Ada", "Sedia Ada", "Hidup", "Kekal"], answer: "Ada" },
+            { id: 3, type: 'fill', q: "Sifat mustahil 'Adam' bagi Allah bermaksud _____.", options: ["Tiada", "Lemah", "Bodoh", "Mati"], answer: "Tiada" },
+            { id: 4, type: 'match', q: "Padankan sifat berlawanan: Sifat 'Qidam' (Sedia Ada) lawannya ialah _____ (Baharu).", options: ["Huduth", "Fana'", "Adam", "Maut"], answer: "Huduth" },
+            { id: 5, type: 'mcq', q: "Berapakah sifat wajib bagi Rasul?", options: ["4", "5", "10", "20"], answer: "4" },
+            { id: 6, type: 'mcq', q: "Apakah maksud sifat 'Siddiq' bagi Rasul?", options: ["Benar", "Bohong", "Menyampaikan", "Bijaksana"], answer: "Benar" },
+            { id: 7, type: 'match', q: "Padankan sifat Rasul: Lawan bagi sifat Amanah (Jujur) ialah _____.", options: ["Khianat (Pecah Amanah)", "Kizib (Dusta)", "Kitman (Sembunyi)", "Baladah (Bodoh)"], answer: "Khianat (Pecah Amanah)" },
+            { id: 8, type: 'fill', q: "Sifat harus bagi Allah hanya ada _____ sahaja.", options: ["Satu", "Dua", "Empat", "Dua Puluh"], answer: "Satu" },
+            { id: 9, type: 'mcq', q: "Apakah maksud sifat harus bagi Allah?", options: ["Melakukan sesuatu yang mungkin atau meninggalkannya", "Mesti mencipta alam", "Terpaksa mengikut kehendak makhluk", "Hanya mencipta kebaikan"], answer: "Melakukan sesuatu yang mungkin atau meninggalkannya" },
+            { id: 10, type: 'mcq', q: "Apakah sifat mustahil bagi Rasul yang bermaksud MENYEMBUNYIKAN?", options: ["Kitman", "Kizib", "Khianat", "Baladah"], answer: "Kitman" },
+            { id: 11, type: 'mcq', q: "Sifat 'Fathonah' bagi rasul bermaksud _____.", options: ["Bijaksana", "Menyampaikan", "Benar", "Jujur"], answer: "Bijaksana" },
+            { id: 12, type: 'fill', q: "Lawan bagi sifat Fathonah (Bijaksana) ialah 'Baladah' yang bermaksud _____.", options: ["Bodoh", "Malas", "Pekak", "Bisu"], answer: "Bodoh" },
+            { id: 13, type: 'mcq', q: "Hari Kiamat juga dikenali sebagai Hari _____.", options: ["Pembalasan / Akhirat", "Raya", "Kemenangan", "Penciptaan"], answer: "Pembalasan / Akhirat" },
+            { id: 14, type: 'mcq', q: "Apakah hukum mempercayai dan beriman kepada Hari Kiamat?", options: ["Wajib", "Sunat", "Harus", "Makruh"], answer: "Wajib" },
+            { id: 15, type: 'mcq', q: "Siapakah malaikat yang ditugaskan meniup sangkakala pada Hari Kiamat?", options: ["Malaikat Israfil", "Malaikat Jibril", "Malaikat Mikail", "Malaikat Izrail"], answer: "Malaikat Israfil" },
+            { id: 16, type: 'fill', q: "Pada hari Kiamat, semua manusia akan dibangkitkan dan dihimpunkan di Padang _____.", options: ["Mahsyar", "Arafah", "Mina", "Gurun"], answer: "Mahsyar" },
+            { id: 17, type: 'mcq', q: "Apakah maksud sifat 'Tabligh' bagi Rasul?", options: ["Menyampaikan", "Menyembunyikan", "Bijaksana", "Benar"], answer: "Menyampaikan" },
+            { id: 18, type: 'mcq', q: "Sifat 'Qiyamuhu Binafsihi' bermaksud Allah berdiri dengan _____.", options: ["Sendiri-Nya", "Pertolongan Makhluk", "Kuasa Malaikat", "Bantuan Alam"], answer: "Sendiri-Nya" },
+            { id: 19, type: 'match', q: "Padankan sifat: Sifat 'Mati' adalah mustahil bagi Allah. Sifat wajibnya ialah _____.", options: ["Hayat (Hidup)", "Ilmu (Mengetahui)", "Sama' (Mendengar)", "Basar (Melihat)"], answer: "Hayat (Hidup)" },
+            { id: 20, type: 'mcq', q: "Tanda-tanda kiamat terbahagi kepada dua, iaitu tanda kecil dan tanda _____.", options: ["Besar", "Sederhana", "Kuat", "Lemah"], answer: "Besar" },
+            { id: 21, type: 'mcq', q: "Apakah erti sifat wajib 'Baqa' bagi Allah?", options: ["Kekal", "Berkuasa", "Mendengar", "Berkata-kata"], answer: "Kekal" },
+            { id: 22, type: 'fill', q: "Sifat mustahil 'Fana' (binasa) adalah berlawanan dengan sifat wajib Allah iaitu _____.", options: ["Baqa'", "Wujud", "Qidam", "Hayat"], answer: "Baqa'" },
+            { id: 23, type: 'match', q: "Padankan erti sifat: 'Mukholafatuhu Lilhawadith' bermaksud Allah _____ dengan sesuatu yang baharu (makhluk).", options: ["Berbeza", "Sama", "Bersama", "Memerlukan"], answer: "Berbeza" },
+            { id: 24, type: 'mcq', q: "Apakah hukum bagi setiap mukalaf mengetahui 20 sifat wajib bagi Allah?", options: ["Fardu Ain", "Fardu Kifayah", "Sunat Muakkad", "Harus"], answer: "Fardu Ain" },
+            { id: 25, type: 'mcq', q: "Apakah erti sifat 'Sama' bagi Allah SWT?", options: ["Maha Mendengar", "Maha Melihat", "Maha Mengetahui", "Maha Hidup"], answer: "Maha Mendengar" },
+            { id: 26, type: 'fill', q: "Matahari terbit dari sebelah barat adalah merupakan salah satu daripada tanda _____ kiamat.", options: ["Besar", "Kecil", "Sederhana", "Awal"], answer: "Besar" },
+            { id: 27, type: 'mcq', q: "Apakah erti sifat mustahil bagi Rasul iaitu 'Kizib'?", options: ["Bohong / Dusta", "Bodoh", "Menyembunyikan", "Pecah Amanah"], answer: "Bohong / Dusta" },
+            { id: 28, type: 'match', q: "Padankan sifat: Allah Maha Melihat = _____.", options: ["Basar", "Sama'", "Kalam", "Ilmu"], answer: "Basar" },
+            { id: 29, type: 'mcq', q: "Antara berikut, yang manakah contoh tanda KECIL hari kiamat?", options: ["Masa berlalu terasa sangat pantas", "Turunnya Nabi Isa a.s", "Keluarnya Dajjal", "Keluarnya Yakjuj dan Makjuj"], answer: "Masa berlalu terasa sangat pantas" },
+            { id: 30, type: 'mcq', q: "Al-Mizan pada hari kiamat bermaksud _____.", options: ["Timbangan amalan manusia", "Jambatan titian", "Syurga", "Buku catatan amal"], answer: "Timbangan amalan manusia" }
+        ];
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let currentSubjectText = "";
+
+        // Fungsi Rawak Array (Fisher-Yates Shuffle)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // DOM Elements
+        const screenHome = document.getElementById('screen-home');
+        const screenQuiz = document.getElementById('screen-quiz');
+        const screenResult = document.getElementById('screen-result');
+        const screenReview = document.getElementById('screen-review');
+        
+        const quizTitle = document.getElementById('quiz-title');
+        const quizIcon = document.getElementById('quiz-icon');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const btnNext = document.getElementById('btn-next');
+        const currentQNum = document.getElementById('current-q-num');
+        const progressBar = document.getElementById('progress-bar');
+        const questionInstruction = document.getElementById('question-instruction');
+
+        function startQuiz(subject) {
+            // Reset variables
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            if (subject === 'feqah') {
+                currentQuestions = shuffleArray([...dataFeqah]); // Clone and shuffle questions
+                currentSubjectText = "FEQAH";
+                quizIcon.className = "fas fa-pray";
+                quizTitle.className = "text-neon-cyan";
+            } else {
+                currentQuestions = shuffleArray([...dataTauhid]);
+                currentSubjectText = "TAUHID";
+                quizIcon.className = "fas fa-star-and-crescent";
+                quizTitle.className = "text-neon-gold";
+            }
+
+            quizTitle.innerText = "MODUL " + currentSubjectText;
+            
+            // Tukar Skrin
+            screenHome.classList.add('hidden-screen');
+            screenQuiz.classList.remove('hidden-screen');
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            btnNext.classList.add('hidden'); // Sembunyikan butang Seterusnya
+            const q = currentQuestions[currentQuestionIndex];
+            
+            // Kemaskini Progress
+            currentQNum.innerText = currentQuestionIndex + 1;
+            const progressPercent = ((currentQuestionIndex) / currentQuestions.length) * 100;
+            progressBar.style.width = progressPercent === 0 ? '5%' : `${progressPercent}%`;
+
+            // Papar Arahan mengikut Jenis Format
+            questionInstruction.classList.remove('hidden');
+            let qTextDisplay = q.q;
+            
+            if(q.type === 'mcq') {
+                questionInstruction.innerHTML = '<i class="fas fa-list-ul mr-1"></i> Aneka Pilihan';
+                questionInstruction.className = "text-sm text-neon-cyan mb-2 font-bold uppercase tracking-widest";
+            } else if (q.type === 'fill') {
+                questionInstruction.innerHTML = '<i class="fas fa-pen mr-1"></i> Isi Tempat Kosong';
+                questionInstruction.className = "text-sm text-neon-gold mb-2 font-bold uppercase tracking-widest";
+                // Tukar '_____' kepada kotak kosong visual
+                qTextDisplay = qTextDisplay.replace(/_{2,}/g, '<span id="fill-blank-box" class="inline-block min-w-[100px] border-b-2 border-dashed border-neonGold text-neonGold text-center px-2 py-1 mx-1 transition-all duration-300">?</span>');
+            } else if (q.type === 'match') {
+                questionInstruction.innerHTML = '<i class="fas fa-link mr-1"></i> Padanan Maklumat';
+                questionInstruction.className = "text-sm text-purple-400 mb-2 font-bold uppercase tracking-widest";
+            }
+
+            questionText.innerHTML = qTextDisplay;
+
+            // Kosongkan dan Jana Pilihan Jawapan (Diacak)
+            optionsContainer.innerHTML = '';
+            const shuffledOptions = shuffleArray([...q.options]);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "option-btn w-full text-left p-4 rounded-xl text-lg font-semibold flex items-center justify-between";
+                btn.innerHTML = `<span>${opt}</span> <i class="fas fa-circle-check text-transparent transition-colors"></i>`;
+                btn.onclick = () => selectOption(btn, opt, q);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectOption(selectedBtn, selectedText, questionData) {
+            // Visual feedback pada butang
+            const allBtns = optionsContainer.querySelectorAll('button');
+            allBtns.forEach(b => {
+                b.classList.remove('option-selected');
+                b.querySelector('i').classList.replace('text-white', 'text-transparent');
+                b.querySelector('i').classList.replace('text-neonCyan', 'text-transparent');
+            });
+            
+            selectedBtn.classList.add('option-selected');
+            selectedBtn.querySelector('i').classList.replace('text-transparent', 'text-neonCyan');
+
+            // Visual feedback untuk Isi Tempat Kosong
+            if(questionData.type === 'fill') {
+                const blankBox = document.getElementById('fill-blank-box');
+                if(blankBox) {
+                    blankBox.innerText = selectedText;
+                    blankBox.classList.remove('border-dashed');
+                    blankBox.classList.add('border-solid', 'bg-neonGold', 'text-black', 'rounded');
+                }
+            }
+
+            // Simpan jawapan sementara (overwrite jika tukar fikiran)
+            userAnswers[currentQuestionIndex] = {
+                questionObj: questionData,
+                userAns: selectedText,
+                isCorrect: selectedText === questionData.answer
+            };
+
+            // Munculkan butang Seterusnya
+            btnNext.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            // Semak jika pengguna belum pilih (fail-safe)
+            if(!userAnswers[currentQuestionIndex]) return;
+
+            // Tambah markah jika betul
+            if(userAnswers[currentQuestionIndex].isCorrect) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < currentQuestions.length) {
+                // Animate keluar-masuk
+                questionText.classList.add('opacity-0');
+                optionsContainer.classList.add('opacity-0');
+                
+                setTimeout(() => {
+                    loadQuestion();
+                    questionText.classList.remove('opacity-0');
+                    optionsContainer.classList.remove('opacity-0');
+                }, 300);
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            screenQuiz.classList.add('hidden-screen');
+            screenResult.classList.remove('hidden-screen');
+            
+            progressBar.style.width = '100%';
+
+            const total = currentQuestions.length;
+            const percentage = Math.round((score / total) * 100);
+            
+            // Animate Score Circle
+            const circle = document.getElementById('score-circle');
+            const scoreText = document.getElementById('score-text');
+            const circumference = 2 * Math.PI * 88; // 553 approx
+            const offset = circumference - (percentage / 100) * circumference;
+            
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+                
+                // Animate Number
+                let currentNum = 0;
+                const interval = setInterval(() => {
+                    if(currentNum >= percentage) {
+                        clearInterval(interval);
+                        scoreText.innerText = percentage + "%";
+                    } else {
+                        currentNum++;
+                        scoreText.innerText = currentNum + "%";
+                    }
+                }, 15);
+            }, 100);
+
+            // Tentukan Gred (Mengikut standard A, B, C, D)
+            const gradeBadge = document.getElementById('grade-badge');
+            const gradeRemark = document.getElementById('grade-remark');
+            
+            if(percentage >= 80) {
+                gradeBadge.innerText = "GRED A";
+                gradeBadge.className = "inline-block px-6 py-2 rounded-full border-2 text-2xl font-bold font-orbitron mb-4 shadow-[0_0_15px_#ffd700] border-neonGold text-neonGold";
+                gradeRemark.innerHTML = "MUMTAZ! (Cemerlang) <br> Tahniah, pertahankan prestasi cemerlang ini!";
+            } else if (percentage >= 60) {
+                gradeBadge.innerText = "GRED B";
+                gradeBadge.className = "inline-block px-6 py-2 rounded-full border-2 text-2xl font-bold font-orbitron mb-4 shadow-[0_0_15px_#00f3ff] border-neonCyan text-neonCyan";
+                gradeRemark.innerHTML = "JAYYID JIDDAN! (Sangat Baik) <br> Syabas, teruskan usaha untuk dapat A!";
+            } else if (percentage >= 40) {
+                gradeBadge.innerText = "GRED C";
+                gradeBadge.className = "inline-block px-6 py-2 rounded-full border-2 text-2xl font-bold font-orbitron mb-4 shadow-[0_0_15px_#60a5fa] border-blue-400 text-blue-400";
+                gradeRemark.innerHTML = "JAYYID! (Baik) <br> Usaha lagi untuk kuasai topik ini ya.";
+            } else {
+                gradeBadge.innerText = "GRED D";
+                gradeBadge.className = "inline-block px-6 py-2 rounded-full border-2 text-2xl font-bold font-orbitron mb-4 shadow-[0_0_15px_#f87171] border-red-400 text-red-400";
+                gradeRemark.innerHTML = "TERUSKAN BERUSAHA! <br> Jangan putus asa, mari buat ulangkaji.";
+            }
+        }
+
+        function showReview() {
+            screenResult.classList.add('hidden-screen');
+            screenReview.classList.remove('hidden-screen');
+            
+            const container = document.getElementById('review-container');
+            container.innerHTML = ''; // Clear previous
+
+            userAnswers.forEach((ansData, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-800/80 rounded-xl p-4 border-l-4 " + (ansData.isCorrect ? "border-green-500" : "border-red-500");
+                
+                // Bersihkan teks soalan dari garis putus-putus
+                let cleanQ = ansData.questionObj.q.replace(/_{2,}/g, "_____");
+
+                let html = `
+                    <div class="text-sm text-gray-400 mb-1">Soalan ${index + 1}</div>
+                    <div class="font-bold mb-3 text-lg">${cleanQ}</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                        <div class="bg-slate-900 p-2 rounded border border-slate-700">
+                            <span class="text-gray-400 block mb-1">Jawapan Anda:</span>
+                            <span class="${ansData.isCorrect ? 'text-green-400' : 'text-red-400'} font-bold">
+                                ${ansData.userAns}
+                                <i class="fas ${ansData.isCorrect ? 'fa-check-circle' : 'fa-times-circle'} ml-1"></i>
+                            </span>
+                        </div>
+                `;
+
+                // Tunjuk jawapan betul jika pengguna salah
+                if (!ansData.isCorrect) {
+                    html += `
+                        <div class="bg-slate-900 p-2 rounded border border-green-500/30 bg-green-900/10">
+                            <span class="text-gray-400 block mb-1">Jawapan Sebenar:</span>
+                            <span class="text-green-400 font-bold">${ansData.questionObj.answer}</span>
+                        </div>
+                    `;
+                }
+
+                html += `</div></div>`;
+                card.innerHTML = html;
+                container.appendChild(card);
+            });
+        }
+
+        function closeReview() {
+            screenReview.classList.add('hidden-screen');
+            screenResult.classList.remove('hidden-screen');
+        }
+
+        function goHome() {
+            // Reset
+            document.getElementById('score-circle').style.strokeDashoffset = 553;
+            document.getElementById('score-text').innerText = "0%";
+            
+            screenResult.classList.add('hidden-screen');
+            screenHome.classList.remove('hidden-screen');
+        }
+
+    </script>
+</body>
+</html>
